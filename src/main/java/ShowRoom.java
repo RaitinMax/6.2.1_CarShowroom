@@ -11,6 +11,7 @@ class ShowRoom implements Runnable {
     }
 
     public void run() {
+       enterToShowRoom(manufactured);
         if (CarsGreaterThanZero()) {
             getInTheCarAndDrive();
         } else if (CarsEqualToZero()) {
@@ -41,7 +42,9 @@ class ShowRoom implements Runnable {
 
     void waitForCar() {
         synchronized (manufactured) {
+
             try {
+                System.out.println("There are NO car left");
                 manufactured.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -53,7 +56,7 @@ class ShowRoom implements Runnable {
         synchronized (manufactured) {
             removeNoOfCars();
             System.out.println(Thread.currentThread().getName()
-                    + " is driving, " + getNoOfCars()
+                    + " has bought, " + getNoOfCars()
                     + " available");
         }
         Random numGen = new Random();
@@ -77,6 +80,9 @@ class ShowRoom implements Runnable {
 
     public void removeNoOfCars() {
         int index = cars.size() - 1;
-        cars.remove(0);
+        cars.remove(index);
+    }
+    public synchronized void enterToShowRoom(Manufactured manufactured){
+        System.out.println(Thread.currentThread().getName()+" entered to showroom");
     }
 }

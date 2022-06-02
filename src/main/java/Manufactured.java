@@ -10,8 +10,8 @@ private String name;
 
     public synchronized void sendToShop(ShowRoom showRoom) {
         try {
-            System.out.format("Factory has been created %s  1 автомобиль!\n", name);
-            Thread.sleep(5100);
+            System.out.format("Factory has been created %s  1 car!\n", name);
+            Thread.sleep(100);
             showRoom.addCar(new CreateCar(this));
             System.out.format("There are %s left\n", showRoom.getNoOfCars());
         } catch (InterruptedException e) {
