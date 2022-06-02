@@ -1,9 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-class VisitorSchool implements Runnable {
+class ShowRoom implements Runnable {
     Manufactured manufactured;
+    private  static final List<CreateCar> cars = new ArrayList<>();
 
-    public VisitorSchool(Manufactured manufactured) {
+    public ShowRoom(Manufactured manufactured) {
         this.manufactured = manufactured;
     }
 
@@ -18,7 +21,7 @@ class VisitorSchool implements Runnable {
 
     public boolean CarsGreaterThanZero() {
         synchronized (manufactured) {
-            if (manufactured.getNoOfCars() > 0) {
+            if (getNoOfCars() > 0) {
                 return true;
             } else {
                 return false;
@@ -28,7 +31,7 @@ class VisitorSchool implements Runnable {
 
     public boolean CarsEqualToZero() {
         synchronized (manufactured) {
-            if (manufactured.getNoOfCars() == 0) {
+            if (getNoOfCars() == 0) {
                 return true;
             } else {
                 return false;
@@ -48,9 +51,9 @@ class VisitorSchool implements Runnable {
 
     void getInTheCarAndDrive() {
         synchronized (manufactured) {
-            manufactured.setNoOfCars(manufactured.getNoOfCars() - 1);
+            removeNoOfCars();
             System.out.println(Thread.currentThread().getName()
-                    + " is driving, " + manufactured.getNoOfCars()
+                    + " is driving, " + getNoOfCars()
                     + " available");
         }
         Random numGen = new Random();
@@ -60,12 +63,20 @@ class VisitorSchool implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        synchronized (manufactured) {
-            manufactured.setNoOfCars(manufactured.getNoOfCars() + 1);
-            System.out.println(Thread.currentThread().getName()
-                    + " has created 1 car. There are " + manufactured.getNoOfCars()
-                    + " available");
-            manufactured.notify();
-        }
+
+    }
+
+    public synchronized void addCar(CreateCar createCar) {
+        cars.add(createCar);
+        notify();
+    }
+
+    public int getNoOfCars() {
+        return cars.size();
+    }
+
+    public void removeNoOfCars() {
+        int index = cars.size() - 1;
+        cars.remove(0);
     }
 }

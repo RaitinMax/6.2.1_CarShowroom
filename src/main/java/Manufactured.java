@@ -2,24 +2,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Manufactured {
-    private  CreateCar createCar;
-    private int noOfCars = 3;
-    public VisitorSchool(CreateCar createCar) {
-        this.createCar = createCar;
-    }
-    private List<Manufactured> cars = new ArrayList<>();
+private String name;
 
-    public int getNoOfCars() {
-        return cars.size();
+    public Manufactured(String name) {
+        this.name = name;
     }
 
-    public void setNoOfCars(int noOfCars) {
-        this.noOfCars = noOfCars;
+    public synchronized void sendToShop(ShowRoom showRoom) {
+        try {
+            System.out.format("Factory has been created %s  1 автомобиль!\n", name);
+            Thread.sleep(5100);
+            showRoom.addCar(new CreateCar(this));
+            System.out.format("There are %s left\n", showRoom.getNoOfCars());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public synchronized void addCar(Manufactured manufactured){
-        cars.add(manufactured);
-        notify();
-    }
 
 }
